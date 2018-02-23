@@ -1,3 +1,12 @@
+*~
+*.sw[mnpcod]
+*.tmp
+*.tmp.*
+*.bak
+log.txt
+*.sublime-project
+*.sublime-workspace
+npm-debug.log*
 .vscode
 .idea
 .DS_Store
@@ -22,3 +31,12 @@ publish/src
 publish/package
 demo/report/report.html
 demo/report/stats.json
+!demo-angular/karma.conf.js
+!demo-angular/app/tests/*.js
+demo-angular/*.d.ts
+!demo-angular/references.d.ts
+demo-angular/lib
+demo-angular/platforms
+demo-angular/report/report.html
+demo-angular/report/stats.json
+
