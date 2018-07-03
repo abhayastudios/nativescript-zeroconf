@@ -8,7 +8,7 @@ export class ZeroconfProvider {
   public servicesUpdated = new EventEmitter();
 
   private zeroconf:Zeroconf;
-  private serviceType:string = '_ljn._tcp.';
+  private serviceType:string = '_http._tcp.';
   private services:Array<any> = [];
 
   constructor() {

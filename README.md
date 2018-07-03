@@ -6,7 +6,10 @@ This nativescript-zeroconf plugin provides a Zeroconf/Bonjour implementation for
 
 ## Demo Application
 
-This repository contains a demo application in the `demo-angular` folder that uses this plugin to display discovered Zeroconf domains and services. The demo app can be a good starting point for your app and may be used for narrowing down issues whilst debugging. Just clone this repo and run `tns run <platform>` in the `demo-angular` folder.
+This repository contains a demo application in the `demo-angular` folder that uses this plugin to display discovered Zeroconf domains and services. The demo app can be a good starting point for your app and may be used for narrowing down issues whilst debugging. Just clone this repo and run `npm run demo.<platform>` in the `src` folder.
+
+The demo app searches for by default for `http` services, but you can easily adjust the `serviceType` in `app/zeroconf/zeroconf.provider.ts`.
+
 
 ## Installation
 
@@ -38,9 +41,11 @@ Then, instantiate a Zeroconf and define the event listeners:
         }
       }
     });
+
+    this.zeroconf.startServiceDiscovery();
 ```
 
-Tip: have a look at the demo project for an example implementatation
+Tip: have a look at the demo project for an example implementation
 
 ## API
 
