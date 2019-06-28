@@ -24,6 +24,6 @@ export class Common extends Observable {
 export interface ZeroconfService {
   'name' : string;
   'type' : string;
-  'host' : string;
-  'port' : number;
+  'host'? : string;
+  'port'? : number;
 }

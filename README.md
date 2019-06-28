@@ -1,12 +1,10 @@
 # nativescript-zeroconf
 
-Add your plugin badges here. See [nativescript-urlhandler](https://github.com/hypery2k/nativescript-urlhandler) for example.
-
 This nativescript-zeroconf plugin provides a Zeroconf/Bonjour implementation for both iOS and Android. Currently, it only supports discovering domains and services in the local network. Should there be any requests, I might implement the service registration parts as well (please open an issue to let me know).
 
 ## Demo Application
 
-This repository contains a demo application in the `demo-angular` folder that uses this plugin to display discovered Zeroconf domains and services. The demo app can be a good starting point for your app and may be used for narrowing down issues whilst debugging. Just clone this repo and run `npm run demo.<platform>` in the `src` folder.
+This repository contains a demo application in the `demo-angular` folder that uses this plugin to display discovered Zeroconf domains and services. The demo app can be a good starting point for your app and may be used for narrowing down issues whilst debugging. Just clone this repo and run `npm run demo.ios` or `npm run demo.android` in the `src` folder.
 
 The demo app searches for by default for `http` services, but you can easily adjust the `serviceType` in `app/zeroconf/zeroconf.provider.ts`.
 
