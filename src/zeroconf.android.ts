@@ -55,7 +55,12 @@ export class Zeroconf extends Common {
           // console.log(`Finished resolving for device ${serviceInfo.getServiceName()}...`);
         });
       },
-      onServiceLost: (serviceInfo: android.net.nsd.NsdServiceInfo) => {}
+      onServiceLost: (serviceInfo: android.net.nsd.NsdServiceInfo) => {
+          this.onServiceLost({
+              'name': serviceInfo.getServiceName(),
+              'type': serviceInfo.getServiceType(),
+          });
+      }
     });
 
     this.mNsdManager.discoverServices(this.serviceType, this.NsdManager.PROTOCOL_DNS_SD, this.mDiscoveryListener);

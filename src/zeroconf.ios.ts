@@ -1,9 +1,19 @@
 import { ZeroconfService, Common } from './zeroconf.common';
 
+/**
+ * This is weird and is only here to fix an issue I kept seeing. Basically,
+ * after the first call to any of the below delegates, 'this' would be {}
+ * instead of the actual constructed object. When I added this to capture the
+ * initial value for this so I could compare, things started working. Very
+ * mysterious. I'd love for somebody more experience with NS to get to the
+ * bottom of things.
+ */
+let delegate = null;
+
 export class Zeroconf extends Common {
   private netServiceBrowser:NSNetServiceBrowser;
 
-constructor(serviceType:string) {
+  constructor(serviceType:string) {
     super(serviceType);
 
     this.netServiceBrowser = NSNetServiceBrowser.new();
@@ -28,7 +38,19 @@ constructor(serviceType:string) {
     /* add delegate - see MyNSNetServiceBrowserDelegate class definition below in file */
 
     this.netServiceBrowser.delegate = MyNSNetServiceBrowserDelegate.new().initWithCallback((result) => {
-      if (result.type==='service') { this.resolveBonjourService(result.data); }
+      if (result.type === 'service') {
+        if (result.removed) {
+          let service:ZeroconfService = {
+              'name' : result.name,
+              'type' : result.type,
+          }
+
+          this.onServiceLost(service);
+        }
+        else {
+          this.resolveBonjourService(result.data);
+        }
+      }
     });
 
     this.netServiceBrowser.searchForServicesOfTypeInDomain(this.serviceType, 'local.');
@@ -53,7 +75,7 @@ constructor(serviceType:string) {
     /* add delegate - see MyNSNetServiceDelegate class definition below in file */
 
     result.delegate = MyNSNetServiceDelegate.new().initWithCallback((result) => {
-      if (result.type==='resolve') { this.processBonjourService(result.data); }
+      if (result.type === 'resolve') { this.processBonjourService(result.data); }
     });
 
     result.resolveWithTimeout(0.0); // value of 0.0 indicates no timeout and a resolve process of indefinite duration
@@ -89,6 +111,7 @@ class MyNSNetServiceBrowserDelegate extends NSObject implements NSNetServiceBrow
 
   public initWithCallback(callback: (result:any) => void): MyNSNetServiceBrowserDelegate {
     this._callback = callback;
+    delegate = this;
     return this;
   }
 
@@ -110,8 +133,19 @@ class MyNSNetServiceBrowserDelegate extends NSObject implements NSNetServiceBrow
   }
 
   public netServiceBrowserDidFindServiceMoreComing(browser:NSNetServiceBrowser, service:NSNetService, moreComing:boolean) {
-    // console.log(`netServiceBrowserDidFindServiceMoreComing, found service ${service.name}`);
+    console.log(`netServiceBrowserDidFindServiceMoreComing, found service ${service.name} ${service.type}`);
     this._callback({
+      'removed': false,
+      'type': 'service',
+      'data': service,
+      'moreComing': moreComing
+    });
+  }
+
+  public netServiceBrowserDidRemoveServiceMoreComing(browser:NSNetServiceBrowser, service:NSNetService, moreComing:boolean) {
+    console.log(`netServiceBrowserDidRemoveServiceMoreComing, removed service ${service.name} ${service.type}`);
+    this._callback({
+      'removed': true,
       'type': 'service',
       'data': service,
       'moreComing': moreComing

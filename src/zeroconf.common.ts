@@ -15,6 +15,10 @@ export class Common extends Observable {
   protected onServiceFound(service:any) : void {
     this.notifyPropertyChange('serviceFound', service);
   }
+
+  protected onServiceLost(service:any) : void {
+    this.notifyPropertyChange('serviceLost', service);
+  }
 }
 
 export interface ZeroconfService {
