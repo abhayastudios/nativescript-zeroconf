@@ -89,7 +89,8 @@ export class Zeroconf extends Common {
           resolve(<ZeroconfService>{
             'name' : serviceInfo.getServiceName(),
             'type' : serviceInfo.getServiceType(),
-            'host' : serviceInfo.getHost().getHostAddress(),
+            'host' : serviceInfo.getHost().hasOwnProperty('getHostName') ? serviceInfo.getHost().getHostName() : serviceInfo.getHost().getHostAddress(),
+            'addr' : [serviceInfo.getHost().getHostAddress()],
             'port' : serviceInfo.getPort(),
           });
         }

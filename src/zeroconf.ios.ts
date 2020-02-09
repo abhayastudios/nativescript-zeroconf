@@ -1,4 +1,12 @@
+import * as utils from 'tns-core-modules/utils/utils';
 import { ZeroconfService, Common } from './zeroconf.common';
+
+/*
+   Overwrite p3 so it will accept not only a string but anything (string buffer in our case)
+   Should not be necessary anymore after this PR: https://github.com/NativeScript/ios-runtime/pull/1250
+*/
+declare function inet_ntop(p1: number, p2: interop.Pointer | interop.Reference<any>, p3: any, p4: number): string;
+
 
 /**
  * This is weird and is only here to fix an issue I kept seeing. Basically,
@@ -85,16 +93,59 @@ export class Zeroconf extends Common {
      Internal method that processes a resolved Bonjour service and adds it to knownDevices
   */
   private processBonjourService(result:NSNetService) : void {
+    let addresses:any = [];
+
     if (result.addresses.count<1) { console.warn(`processBonjourService: did not resolve any IP addresses for ${result.name}!`); }
+    else {
+      addresses = this.extractAddressesFromNSNetService(result.addresses);
+    }
 
     let service:ZeroconfService = {
       'name' : result.name,
       'type' : result.type,
       'host' : result.hostName,
+      'addr' : addresses,
       'port' : result.port,
     }
 
     this.onServiceFound(service);
+  }
+
+  /*
+     Internal method that extracts IP addresses from a NSNetService object
+     Mostly based on: https://github.com/NativeScript/ios-runtime/issues/1017#issuecomment-440823484
+  */
+  private extractAddressesFromNSNetService(socketsData:NSArray<NSData>) : any {
+    let addresses:Array<any> = [];
+    let _socketsData:Array<any> = utils.ios.collections.nsArrayToJSArray(socketsData);
+
+    for (let socketData of _socketsData) {
+      let socket_address = new interop.Reference(sockaddr_in, socketData.bytes).value;
+      // console.dir(socket_address);
+
+      if (socket_address.sin_family == 2 /*AF_INET*/) {
+        const ip_version = 4;
+        let ip_address = undefined;
+
+        let sin_addr = new interop.Reference(in_addr, socket_address.sin_addr);
+        const buffer_size = 80;
+        const address_buffer = interop.alloc(buffer_size);
+        const res = inet_ntop(socket_address.sin_family, sin_addr, address_buffer, buffer_size);
+        if (!res) { console.warn(`inet_ntop failed with error: ${__error()}`); }
+        else {
+          ip_address=NSString.stringWithUTF8String(<string><unknown>address_buffer).toString(); // convert to JS string;
+          addresses.push(ip_address);
+        }
+      } else if (socket_address.sin_family == 30 /*AF_INET6*/) {
+        const ip_version = 6;
+        let ip_address = undefined;
+        // ip_address = new interop.Reference(sockaddr_in, socket.sa_data).value;
+        // sin_addr = interop.handleof(addrs.ifa_addr).add(8);
+        addresses.push(ip_address);
+      }
+    }
+
+    return addresses;
   }
 }
 
