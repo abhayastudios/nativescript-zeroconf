@@ -1,4 +1,4 @@
-import * as utils from 'tns-core-modules/utils/utils';
+import {Utils} from '@nativescript/core';
 import { ZeroconfService, Common } from './zeroconf.common';
 
 /*
@@ -18,6 +18,7 @@ declare function inet_ntop(p1: number, p2: interop.Pointer | interop.Reference<a
  */
 let delegate = null;
 
+@NativeClass()
 export class Zeroconf extends Common {
   private netServiceBrowser:NSNetServiceBrowser;
 
@@ -117,7 +118,7 @@ export class Zeroconf extends Common {
   */
   private extractAddressesFromNSNetService(socketsData:NSArray<NSData>) : any {
     let addresses:Array<any> = [];
-    let _socketsData:Array<any> = utils.ios.collections.nsArrayToJSArray(socketsData);
+    let _socketsData:Array<any> = Utils.ios.collections.nsArrayToJSArray(socketsData);
 
     for (let socketData of _socketsData) {
       let socket_address = new interop.Reference(sockaddr_in, socketData.bytes).value;

@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Observable, PropertyChangeData } from 'tns-core-modules/data/observable';
+import { Observable, PropertyChangeData } from '@nativescript/core';
 
 import { Zeroconf } from 'nativescript-zeroconf';
 

@@ -1,5 +1,6 @@
-import { Observable, EventData } from 'tns-core-modules/data/observable';
+import { Observable, EventData } from '@nativescript/core';
 
+@NativeClass()
 export class Common extends Observable {
   protected serviceType:string;
 
