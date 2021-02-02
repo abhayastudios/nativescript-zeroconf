@@ -3,7 +3,6 @@ import { ZeroconfService, Common } from './zeroconf.common';
 import * as async from 'async';
 
 // declare var appModule:any;
-@NativeClass()
 export class Zeroconf extends Common {
   private nativeApp:android.app.Application;
   private context:any; //android.content.Context;
