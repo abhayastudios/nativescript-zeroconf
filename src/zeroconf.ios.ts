@@ -18,7 +18,6 @@ declare function inet_ntop(p1: number, p2: interop.Pointer | interop.Reference<a
  */
 let delegate = null;
 
-@NativeClass()
 export class Zeroconf extends Common {
   private netServiceBrowser:NSNetServiceBrowser;
 
@@ -151,7 +150,7 @@ export class Zeroconf extends Common {
 }
 
 /* Define NSNetServiceBrowserDelegate implementation class */
-
+@NativeClass()
 class MyNSNetServiceBrowserDelegate extends NSObject implements NSNetServiceBrowserDelegate {
   public static ObjCProtocols = [NSNetServiceBrowserDelegate];
 
@@ -206,7 +205,7 @@ class MyNSNetServiceBrowserDelegate extends NSObject implements NSNetServiceBrow
 }
 
 /* Define NSNetServiceDelegate implementation class for resolving host/port once service was discovered */
-
+@NativeClass()
 class MyNSNetServiceDelegate extends NSObject implements NSNetServiceDelegate {
   public static ObjCProtocols = [NSNetServiceDelegate];
 

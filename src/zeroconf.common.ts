@@ -1,6 +1,5 @@
 import { Observable, EventData } from '@nativescript/core';
 
-@NativeClass()
 export class Common extends Observable {
   protected serviceType:string;
 
