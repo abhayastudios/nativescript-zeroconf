@@ -21,7 +21,7 @@ First, import the plugin into your provider/component, and, since the plugin ret
 
 ```javascript
 import { Zeroconf } from 'nativescript-zeroconf';
-import { Observable, PropertyChangeData } from 'tns-core-modules/data/observable';
+import { Observable, PropertyChangeData } from '@nativescript/core';
 ```
 
 Then, instantiate a Zeroconf and define the event listeners:

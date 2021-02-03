@@ -1,4 +1,4 @@
-import * as utils from 'tns-core-modules/utils/utils';
+import {Utils} from '@nativescript/core';
 import { ZeroconfService, Common } from './zeroconf.common';
 
 /*
@@ -117,7 +117,7 @@ export class Zeroconf extends Common {
   */
   private extractAddressesFromNSNetService(socketsData:NSArray<NSData>) : any {
     let addresses:Array<any> = [];
-    let _socketsData:Array<any> = utils.ios.collections.nsArrayToJSArray(socketsData);
+    let _socketsData:Array<any> = Utils.ios.collections.nsArrayToJSArray(socketsData);
 
     for (let socketData of _socketsData) {
       let socket_address = new interop.Reference(sockaddr_in, socketData.bytes).value;
@@ -150,7 +150,7 @@ export class Zeroconf extends Common {
 }
 
 /* Define NSNetServiceBrowserDelegate implementation class */
-
+@NativeClass()
 class MyNSNetServiceBrowserDelegate extends NSObject implements NSNetServiceBrowserDelegate {
   public static ObjCProtocols = [NSNetServiceBrowserDelegate];
 
@@ -205,7 +205,7 @@ class MyNSNetServiceBrowserDelegate extends NSObject implements NSNetServiceBrow
 }
 
 /* Define NSNetServiceDelegate implementation class for resolving host/port once service was discovered */
-
+@NativeClass()
 class MyNSNetServiceDelegate extends NSObject implements NSNetServiceDelegate {
   public static ObjCProtocols = [NSNetServiceDelegate];
 

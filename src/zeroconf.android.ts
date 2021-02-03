@@ -1,10 +1,8 @@
 import { ZeroconfService, Common } from './zeroconf.common';
-import { Observable } from "tns-core-modules/data/observable";
 
 import * as async from 'async';
 
 // declare var appModule:any;
-
 export class Zeroconf extends Common {
   private nativeApp:android.app.Application;
   private context:any; //android.content.Context;
